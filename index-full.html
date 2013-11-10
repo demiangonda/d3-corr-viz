@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+circle {
+  fill: #ccc;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+text {
+  fill: #000;
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+</style>
+<script type="text/javascript" src="d3.min.js" ></script>
+<body>
+  <script>
+
+var link = [ 
+  { "source": "Algoritmos y Estructuras de Datos", "target": "Paradigmas de Programacion" },
+  { "source": "Matematica Discreta", "target": "Paradigmas de Programacion" },
+  { "source": "Algoritmos y Estructuras de Datos", "target": "Sistemas Operativos" },
+  { "source": "Matematica Discreta", "target": "Sistemas Operativos" },
+  { "source": "Arquitectura de Computadoras", "target": "Sistemas Operativos" },
+  { "source": "Sistemas y Organizaciones", "target": "Analisis de Sistemas" },
+  { "source": "Matematica Discreta", "target": "Analisis de Sistemas" },
+  { "source": "Algoritmos y Estructuras de Datos", "target": "Sintaxis y Semantica de Lenguajes" },
+  { "source": "Matematica Discreta", "target": "Sintaxis y Semantica de Lenguajes" },
+  { "source": "Analisis Matemático I", "target": "Probabilidad y Estadistica" },
+  { "source": "Algebra y Geometría Analítica", "target": "Probabilidad y Estadistica" },
+  { "source": "Analisis Matemático I", "target": "Analisis Matematico II" },
+  { "source": "Algebra y Geometría Analítica", "target": "Analisis Matematico II" },
+  { "source": "Analisis de Sistemas", "target": "Diseño de Sistemas" },
+  { "source": "Paradigmas de Programacion", "target": "Diseño de Sistemas" },
+  { "source": "Arquitectura de Computadoras", "target": "Comunicaciones" },
+  { "source": "Analisis Matematico II", "target": "Comunicaciones" },
+  { "source": "Fisica II", "target": "Comunicaciones" },
+  { "source": "Analisis de Sistemas", "target": "Gestion de Datos" },
+  { "source": "Paradigmas de Programacion", "target": "Gestion de Datos" },
+  { "source": "Sistemas y Organizaciones", "target": "Gestion de Datos" },
+  { "source": "Sistemas Operativos", "target": "Redes de Informacion" },
+  { "source": "Comunicaciones", "target": "Redes de Informacion" },
+  { "source": "Diseño de Sistemas", "target": "Administracion de Recursos" },
+  { "source": "Sistemas Operativos", "target": "Administracion de Recursos" },
+  { "source": "Economia", "target": "Administracion de Recursos" },
+  { "source": "Quimica", "target": "Teoria de Control" },
+  { "source": "Matematica Superior", "target": "Teoria de Control" },
+  { "source": "Administracion de Recursos", "target": "Proyecto Final" },
+  { "source": "Ingenieria de Software", "target": "Proyecto Final" },
+  { "source": "Redes de Informacion", "target": "Proyecto Final" },
+  { "source": "Legislacion", "target": "Proyecto Final" },
+  { "source": "Administracion de Recursos", "target": "Administracion Gerencial" },
+  { "source": "Investigacion Operativa", "target": "Administracion Gerencial" },
+  { "source": "Simulacion", "target": "Inteligencia Artificial" },
+  { "source": "Investigacion Operativa", "target": "Inteligencia Artificial" },
+  { "source": "Ingles I", "target": "Ingles II" },
+  { "source": "Fisica I", "target": "Fisica II" },
+  { "source": "Analisis Matemático I", "target": "Fisica II" },
+  { "source": "Analisis Matematico II", "target": "Matematica Superior" },
+  { "source": "Analisis de Sistemas", "target": "Economia" },
+  { "source": "Analisis de Sistemas", "target": "Legislacion" },
+  { "source": "Ingeniería y Sociedad", "target": "Legislacion" },
+  { "source": "Probabilidad y Estadistica", "target": "Ingenieria de Software" },
+  { "source": "Diseño de Sistemas", "target": "Ingenieria de Software" },
+  { "source": "Gestion de Datos", "target": "Ingenieria de Software" },
+  { "source": "Administracion de Recursos", "target": "Sistemas de Gestion" },
+  { "source": "Investigacion Operativa", "target": "Sistemas de Gestion" },
+  { "source": "Simulacion", "target": "Sistemas de Gestion" },
+  { "source": "Matematica Superior", "target": "Simulacion" },
+  { "source": "Probabilidad y Estadistica", "target": "Investigacion Operativa" },
+  { "source": "Analisis Matemático I", "target": "Investigacion Operativa" },
+  { "source": "Probabilidad y Estadistica", "target": "Simulacion" },
+];
+
+var levels = {
+  "Administracion Gerencial":5,
+  "Administracion de Recursos":4,
+  "Algebra y Geometría Analítica":1,
+  "Algoritmos y Estructuras de Datos":1,
+  "Analisis Matematico II":2,
+  "Analisis Matemático I":1,
+  "Analisis de Sistemas":2,
+  "Arquitectura de Computadoras":1,
+  "Comunicaciones":3,
+  "Diseño de Sistemas":3,
+  "Economia":4,
+  "Fisica I":1,
+  "Fisica II":2,
+  "Gestion de Datos":3,
+  "Ingenieria de Software":4,
+  "Ingeniería y Sociedad":1,
+  "Ingles I":1,
+  "Ingles II":2,
+  "Inteligencia Artificial":5,
+  "Investigacion Operativa":4,
+  "Legislacion":4,
+  "Matematica Discreta":1,
+  "Matematica Superior":3,
+  "Paradigmas de Programacion":2,
+  "Probabilidad y Estadistica":2,
+  "Proyecto Final":5,
+  "Quimica":1,
+  "Redes de Informacion":4,
+  "Simulacion":4,
+  "Sintaxis y Semantica de Lenguajes":2,
+  "Sistemas Operativos":3,
+  "Sistemas de Gestion":5,
+  "Sistemas y Organizaciones":1,
+  "Teoria de Control":4
+};
+
+var nodes = {};
+
+//var color = d3.scale.category20();
+
+// Compute the distinct nodes from the link.
+link.forEach(function(link) {
+  link.source = nodes[link.source] || 
+  (nodes[link.source] = {name: link.source, 
+    level: levels[link.source] });
+  link.target = nodes[link.target] || 
+  (nodes[link.target] = {name: link.target,
+    level: levels[link.target] });
+  link.value = +link.value;
+});
+
+console.log(nodes);
+
+//canvas size
+var width = 1024,
+height = 600;
+
+var force = d3.layout.force()
+.nodes(d3.values(nodes))
+.links(link)
+.size([width, height])
+.linkDistance(100) //"length" of links
+.charge(-300) //-300
+.on("tick", tick)
+.start();
+
+var svg = d3.select("body").append("svg")
+.attr("width", width)
+.attr("height", height);
+
+// build the arrow.
+svg.append("svg:defs").selectAll("marker")
+.data(["end"])
+.enter().append("svg:marker")
+.attr("id", String)
+.attr("viewBox", "0 -5 10 10")
+.attr("refX", 15)
+.attr("refY", -1.5)
+.attr("markerWidth", 6)
+.attr("markerHeight", 6)
+.attr("orient", "auto")
+.append("svg:path")
+.attr("d", "M0,-5L10,0L0,5");
+
+// add the link and the arrows
+var path = svg.append("svg:g").selectAll("path")
+.data(force.links())
+.enter().append("svg:path")
+.attr("class", "link")
+.attr("marker-end", "url(#end)");
+
+// define the nodes
+var node = svg.selectAll(".node")
+.data(force.nodes())
+.enter().append("g")
+.attr("class", "node")
+.call(force.drag);
+
+// add the nodes
+node.append("circle")
+.attr("r", 5);
+
+// add the text 
+node.append("text")
+.attr("x", 12)
+.attr("dy", ".35em")
+.text(function(d) { return d.name; });
+
+// add the curvy lines
+function tick() {
+  path.attr("d", function(d) {
+    var dx = d.target.x - d.source.x,
+    dy = d.target.y - d.source.y,
+    dr = Math.sqrt(dx * dx + dy * dy);
+    return "M" + 
+    d.source.x + "," + 
+    d.source.y + "A" + 
+    dr + "," + dr + " 0 0,1 " + 
+    d.target.x + "," + 
+    d.target.y;
+  });
+
+  //var pos = [
+  //  {"name":"Simulacion","x":"0","y":"50"}
+  //];
+
+  node
+  .attr("transform", function(d) {
+  //  d.fixed = true;
+  //  pos.forEach(function(pos){
+  //    if(pos.name === d.name){
+  //      d.x = pos.x;
+  //      d.x = pos.y;
+  //    }
+  //  });
+    return "translate(" + d.x + "," + d.y + ")"; });
+}
+
+</script>
+</body>
+</html>
